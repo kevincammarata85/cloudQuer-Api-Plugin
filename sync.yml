@@ -1,0 +1,28 @@
+kind: source
+spec:
+  name: "api-source"
+  registry: "grpc"
+  path: "localhost:7777"
+  version: "v1.0.0"
+  tables:
+    ["*"]
+  destinations:
+    - "sqlite"
+  backend_options:
+    table_name: "vulnerabilities"
+    connection: "./db.sql"  
+  spec:
+    apiEndpoints:
+      - name: "vulnerabilities"
+        url: "https://services.nvd.nist.gov/rest/json/cves/2.0"
+    concurrency: 5
+---
+kind: destination
+spec:
+  name: sqlite
+  path: cloudquery/sqlite
+  version: "v2.8.6"
+  write_mode: "append"
+  migrate_mode : "forced"
+  spec:
+    connection_string: ./db.sql
